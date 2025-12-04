@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 class ReportCreate(BaseModel):
     start_date: datetime
@@ -11,9 +11,10 @@ class ReportCreate(BaseModel):
     suggestions: List[str]
 
 class ReportOut(ReportCreate):
-    model_config = ConfigDict(from_attributes=True)
-    
     id: str
     user_id: str
     created_at: datetime
+
+    class Config:
+        from_attributes = True
 

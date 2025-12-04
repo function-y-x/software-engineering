@@ -1,13 +1,9 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 
 class UserInDB(BaseModel):
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True
-    )
-    
     id: Optional[str] = Field(alias="_id")
     username: str
     email: str
@@ -17,4 +13,11 @@ class UserInDB(BaseModel):
     ai_companion_style: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {
+            datetime: lambda dt: dt.isoformat()
+        }
 

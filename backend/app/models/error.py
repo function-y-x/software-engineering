@@ -1,13 +1,9 @@
 from datetime import datetime
 from typing import Optional, Dict, Any
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 
 class ErrorEntry(BaseModel):
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True
-    )
-    
     id: Optional[str] = Field(alias="_id")
     user_id: str
     description: str
@@ -15,4 +11,11 @@ class ErrorEntry(BaseModel):
     ai_analysis: Optional[Dict[str, Any]] = None # {type: "概念不清", reason: "..."}
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {
+            datetime: lambda dt: dt.isoformat()
+        }
 
